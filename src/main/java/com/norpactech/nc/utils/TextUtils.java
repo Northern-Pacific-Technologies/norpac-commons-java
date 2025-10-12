@@ -331,4 +331,43 @@ public class TextUtils {
   public static String lastDelimetedValue(String fullValue, String delimeter) {
     return fullValue.substring(fullValue.lastIndexOf(delimeter) + 1);
   }  
+
+  /**
+   * Converts either snake_case or camelCase text into a Java class name (UpperCamelCase).
+   * Underscores or hyphens are treated as word delimiters when present; otherwise,
+   * the first character is simply uppercased, preserving existing camel humps.
+   *
+   * @param text the input text in snake_case or camelCase, may be null or empty
+   * @return the converted Java class name, or the original string if null or empty
+   * @example toClassName("user_name") returns "UserName"
+   * @example toClassName("userName") returns "UserName"
+   * @example toClassName("UserName") returns "UserName"
+   */
+  public static String toClassName(String text) {
+    if (text == null || text.isEmpty()) {
+      return text;
+    }
+
+    // If it looks like delimited words (snake/kebab), split and capitalize each token
+    if (text.indexOf('_') >= 0 || text.indexOf('-') >= 0) {
+      String[] parts = text.split("[_\\-]+");
+      StringBuilder sb = new StringBuilder();
+      for (String part : parts) {
+        if (part.isEmpty()) continue;
+        if (part.length() == 1) {
+          sb.append(Character.toUpperCase(part.charAt(0)));
+        } else {
+          sb.append(Character.toUpperCase(part.charAt(0)))
+            .append(part.substring(1).toLowerCase());
+        }
+      }
+      return sb.toString();
+    }
+
+    // Otherwise assume camelCase or already PascalCase; just uppercase the first char
+    if (text.length() == 1) {
+      return text.toUpperCase();
+    }
+    return Character.toUpperCase(text.charAt(0)) + text.substring(1);
+  }
 }
