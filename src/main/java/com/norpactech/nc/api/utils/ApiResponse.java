@@ -130,7 +130,7 @@ public class ApiResponse {
             fieldValue = Integer.valueOf(value.split("\\.")[0]);
           }
         }
-
+        
         if (field.getType() == java.util.UUID.class && fieldValue instanceof String) {
           fieldValue = UUID.fromString((String) fieldValue);
         }
