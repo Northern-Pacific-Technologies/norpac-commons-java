@@ -1,4 +1,4 @@
-package com.norpactech.ub.service;
+package com.norpactech.nc.service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

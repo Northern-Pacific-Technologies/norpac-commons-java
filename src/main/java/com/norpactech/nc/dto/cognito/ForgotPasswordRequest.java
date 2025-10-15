@@ -1,4 +1,4 @@
-package com.norpactech.pf.dto.cognito;
+package com.norpactech.nc.dto.cognito;
 import lombok.Data;
 
 @Data
