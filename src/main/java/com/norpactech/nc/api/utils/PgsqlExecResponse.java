@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.norpactech.nc.api.enums.EnumStatus;
 import com.norpactech.nc.api.exception.ApiResponseException;
+import com.norpactech.nc.enums.EnumStatus;
 
 public class PgsqlExecResponse {
 

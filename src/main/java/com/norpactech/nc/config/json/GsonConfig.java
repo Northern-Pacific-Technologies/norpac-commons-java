@@ -16,6 +16,80 @@ import com.norpactech.nc.utils.Constant;
 
 public class GsonConfig {
 
+  private static final Gson INSTANCE = createGson();
+  /**
+   * Get the configured Gson instance
+   * @return Gson instance with proper type adapters
+   */
+  public static Gson getInstance() {
+    return INSTANCE;
+  }
+
+  /**
+   * Convert an object to JSON string using properly configured Gson
+   * @param object the object to convert to JSON
+   * @return JSON string representation
+   */
+  public static String toJson(Object object) {
+    return INSTANCE.toJson(object);
+  }
+
+  /**
+   * Convert a JSON string to an object using properly configured Gson
+   * @param <T> the type of the object
+   * @param json the JSON string to parse
+   * @param classOfT the class of T
+   * @return an object of type T
+   */
+  public static <T> T fromJson(String json, Class<T> classOfT) {
+    return INSTANCE.fromJson(json, classOfT);
+  }
+  private static Gson createGson() {
+    return new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
+          @Override
+          public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+            return src == null ? null : new JsonPrimitive(Constant.TIMESTAMP_FORMATTER.format(src));
+          }
+        })
+        .registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+          @Override
+          public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            if (json == null || json.isJsonNull() || json.getAsString().isEmpty()) {
+              return null;
+            }
+            return LocalDateTime.parse(json.getAsString(), Constant.TIMESTAMP_FORMATTER);
+          }
+        })
+        .registerTypeAdapter(java.sql.Timestamp.class, new JsonSerializer<java.sql.Timestamp>() {
+          @Override
+          public JsonElement serialize(java.sql.Timestamp src, Type typeOfSrc, JsonSerializationContext context) {
+            return src == null ? null : new JsonPrimitive(Constant.TIMESTAMP_FORMATTER.format(src.toLocalDateTime()));
+          }
+        })
+        .registerTypeAdapter(java.sql.Timestamp.class, new JsonDeserializer<java.sql.Timestamp>() {
+          @Override
+          public java.sql.Timestamp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            if (json == null || json.isJsonNull() || json.getAsString().isEmpty()) {
+              return null;
+            }
+            return java.sql.Timestamp.valueOf(LocalDateTime.parse(json.getAsString(), Constant.TIMESTAMP_FORMATTER));
+          }
+        })
+        .create();
+  }
+
+  /**
+   * Convert a JSON string to an object using properly configured Gson
+   * @param <T> the type of the object
+   * @param json the JSON string to parse
+   * @param typeOfT the type of T
+   * @return an object of type T
+   */
+  public static <T> T fromJson(String json, Type typeOfT) {
+    return INSTANCE.fromJson(json, typeOfT);
+  }
+
   /**
    * Provides a preconfigured GsonBuilder with NorPac defaults, allowing subclasses
    * to customize before creating the Gson instance.

@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.norpactech.nc.api.enums.EnumApiCodes;
+import com.norpactech.nc.enums.EnumApiCodes;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Meta {

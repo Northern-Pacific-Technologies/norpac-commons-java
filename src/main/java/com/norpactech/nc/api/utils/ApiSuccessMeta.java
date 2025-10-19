@@ -1,6 +1,6 @@
 package com.norpactech.nc.api.utils;
 
-import com.norpactech.nc.api.enums.EnumApiCodes;
+import com.norpactech.nc.enums.EnumApiCodes;
 
 public class ApiSuccessMeta extends Meta {
   

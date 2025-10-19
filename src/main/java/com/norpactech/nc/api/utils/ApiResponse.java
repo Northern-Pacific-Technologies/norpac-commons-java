@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.google.gson.internal.LinkedTreeMap;
-import com.norpactech.nc.api.enums.EnumApiCodes;
-import com.norpactech.nc.api.enums.EnumStatus;
 import com.norpactech.nc.api.exception.ApiResponseException;
+import com.norpactech.nc.enums.EnumApiCodes;
+import com.norpactech.nc.enums.EnumStatus;
 import com.norpactech.nc.utils.TextUtils;
 /**
  * Handles: Successful, Unsuccessful, and Exception responses

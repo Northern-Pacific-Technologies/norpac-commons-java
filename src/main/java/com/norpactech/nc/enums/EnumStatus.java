@@ -1,4 +1,4 @@
-package com.norpactech.nc.api.enums;
+package com.norpactech.nc.enums;
 
 public enum EnumStatus {
   
