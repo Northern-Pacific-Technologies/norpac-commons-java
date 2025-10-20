@@ -4,12 +4,12 @@ package com.norpactech.nc.vo;
  *  
  * For license details, see the LICENSE file in this project root.
  */
-public class JwtRequestVO {
+public class JwtUsernamePasswordRequestVO {
 
   private String username;
   private String password;
   
-  public JwtRequestVO(String username, String password) {
+  public JwtUsernamePasswordRequestVO(String username, String password) {
     this.username = username;
     this.password = password;
   }

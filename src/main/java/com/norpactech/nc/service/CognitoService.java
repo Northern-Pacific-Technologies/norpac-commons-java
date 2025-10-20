@@ -7,8 +7,13 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.norpactech.nc.api.utils.ApiResponse;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
@@ -32,17 +37,20 @@ public class CognitoService {
   protected String userPoolId = null;
   protected String userPoolClientId = null;
   protected String userPoolClientSecret = null;
+  protected String userPoolDomain = null;
 
   public void init(
       String region, 
       String userPoolId, 
       String userPoolClientId, 
-      String userPoolClientSecret) {
+      String userPoolClientSecret,
+      String userPoolDomain) {
     
     this.region = region;
     this.userPoolId = userPoolId;
     this.userPoolClientId = userPoolClientId;
     this.userPoolClientSecret = userPoolClientSecret;
+    this.userPoolDomain = userPoolDomain;
   }
   
   public ApiResponse signUp(String username, String password) {
@@ -88,8 +96,67 @@ public class CognitoService {
       return new ApiResponse(e);
     }
   }
+  /**
+   * Sign in using Client Credentials Grant.
+   * Returns access token or error message.
+   */
+  public ApiResponse m2mSignIn(String clientSecret, String scope) {
 
+    String tokenUrl = this.userPoolDomain + "/oauth2/token";
 
+    OkHttpClient client = new OkHttpClient();
+
+    try {
+      String credentials = userPoolClientId + ":" + clientSecret;
+      String encoded = Base64.getEncoder()
+          .encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+
+      okhttp3.FormBody formBody = new okhttp3.FormBody.Builder()
+          .add("grant_type", "client_credentials")
+          // Optional: include your resource server scope(s)
+          // .add("scope", "https://api.unitedbins.com/read:invoices")
+          .build();
+
+      Request request = new Request.Builder()
+          .url(tokenUrl)
+          .post(formBody)
+          .addHeader("Authorization", "Basic " + encoded)
+          .addHeader("Content-Type", "application/x-www-form-urlencoded")
+          .addHeader("Accept", "application/json")
+          .build();
+
+      try (Response response = client.newCall(request).execute()) {
+
+        String body = response.body() != null ? response.body().string() : "";
+
+        if (!response.isSuccessful()) {
+          return new ApiResponse("Token request failed: HTTP " + 
+              response.code() + " - " + response.message() + " : " + body);
+        }
+
+        // Parse JSON token response
+        JsonObject json = new Gson().fromJson(body, JsonObject.class);
+        String accessToken = json.get("access_token").getAsString();
+        String tokenType = json.get("token_type").getAsString();
+        int expiresIn = json.get("expires_in").getAsInt();
+
+        Map<String, Object> result = Map.of(
+            "accessToken", accessToken,
+            "tokenType", tokenType,
+            "expiresIn", expiresIn
+            );
+
+        return new ApiResponse(result);
+      }
+
+    } catch (Exception e) {
+      return new ApiResponse("Error obtaining client credentials: " + e.getMessage());
+    }
+  }
+  /**
+   * Sign in a user with username and password.
+   * Returns tokens or indicates if MFA is required.
+   */ 
   public ApiResponse signIn(String username, String password) {
     
     try (CognitoIdentityProviderClient cognitoClient = CognitoIdentityProviderClient.builder()

@@ -18,6 +18,7 @@ public class Globals {
   private static final Dotenv dotenv;
 
   // API Configuration
+  public static final String API_SECRET;
   public static final String API_USERNAME;
   public static final String API_PASSWORD;
   public static final String API_URL;
@@ -50,8 +51,9 @@ public class Globals {
     logger.info("Loading global environment variables...");
 
     // API Configuration
-    API_USERNAME = getRequiredEnv("API_USERNAME");
-    API_PASSWORD = getRequiredEnv("API_PASSWORD");
+    API_SECRET = getEnvWithDefault("API_SECRET", null);
+    API_USERNAME = getEnvWithDefault("API_USERNAME", null);
+    API_PASSWORD = getEnvWithDefault("API_PASSWORD", null);
     API_URL = getRequiredEnv("API_URL");
     API_VERSION = getEnvWithDefault("API_VERSION", "v1");
 
@@ -206,7 +208,6 @@ public class Globals {
       logger.info("============================");
     }
   }
-
   /**
    * Validate that all required environment variables are properly set
    */
