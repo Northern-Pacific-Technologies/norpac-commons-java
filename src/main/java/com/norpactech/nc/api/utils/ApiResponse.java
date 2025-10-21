@@ -171,7 +171,25 @@ public class ApiResponse {
   public Object getProperty(String name) {
     
     name = TextUtils.toSnakeCase(name);
-    var data = (LinkedHashMap<String, Object>) getData();
+    // Handle both LinkedTreeMap and LinkedHashMap
+    Map<String, Object> data;
+    Object dataObj = getData();
+    
+    if (dataObj instanceof LinkedTreeMap) {
+      LinkedTreeMap<String, Object> treeMap = (LinkedTreeMap<String, Object>) dataObj;
+      data = new LinkedHashMap<>(treeMap);
+    } 
+    else if (dataObj instanceof LinkedHashMap) {
+      data = (LinkedHashMap<String, Object>) dataObj;
+    } 
+    else {
+      // Handle other Map types or return null if not a Map
+      if (dataObj instanceof Map) {
+        data = new LinkedHashMap<>((Map<String, Object>) dataObj);
+      } else {
+        return null;
+      }
+    }
     var property = data.get(name);
     
     if (property == null) {
