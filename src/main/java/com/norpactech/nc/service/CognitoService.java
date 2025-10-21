@@ -105,16 +105,18 @@ public class CognitoService {
     String tokenUrl = this.userPoolDomain + "/oauth2/token";
 
     OkHttpClient client = new OkHttpClient();
-
+    
     try {
       String credentials = userPoolClientId + ":" + clientSecret;
       String encoded = Base64.getEncoder()
           .encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
 
+      if (scope == null || scope.isEmpty()) {
+        throw new IllegalArgumentException("Scope must be provided for Client Credentials Grant");
+      }
       okhttp3.FormBody formBody = new okhttp3.FormBody.Builder()
           .add("grant_type", "client_credentials")
-          // Optional: include your resource server scope(s)
-          // .add("scope", "https://api.unitedbins.com/read:invoices")
+          .add("scope", scope)
           .build();
 
       Request request = new Request.Builder()

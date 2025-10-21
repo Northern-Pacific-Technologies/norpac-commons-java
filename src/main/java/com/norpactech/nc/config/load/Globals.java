@@ -18,9 +18,13 @@ public class Globals {
   private static final Dotenv dotenv;
 
   // API Configuration
+  public static final String API_CLIENT;
   public static final String API_SECRET;
+  public static final String API_SCOPE;
+  
   public static final String API_USERNAME;
   public static final String API_PASSWORD;
+  
   public static final String API_URL;
   public static final String API_VERSION;
 
@@ -50,12 +54,16 @@ public class Globals {
 
     logger.info("Loading global environment variables...");
 
-    // API Configuration
+    // Login with Client Credentials  
+    API_CLIENT = getEnvWithDefault("API_CLIENT", null);
     API_SECRET = getEnvWithDefault("API_SECRET", null);
+    API_SCOPE = getEnvWithDefault("API_SCOPE", "norpac-commons-api/write");
+    // Login Username/Password
     API_USERNAME = getEnvWithDefault("API_USERNAME", null);
     API_PASSWORD = getEnvWithDefault("API_PASSWORD", null);
+    
     API_URL = getRequiredEnv("API_URL");
-    API_VERSION = getEnvWithDefault("API_VERSION", "v1");
+    API_VERSION = getRequiredEnv("API_VERSION");
 
     // Database Configuration
     DB_USERNAME = getRequiredEnv("DB_USERNAME");

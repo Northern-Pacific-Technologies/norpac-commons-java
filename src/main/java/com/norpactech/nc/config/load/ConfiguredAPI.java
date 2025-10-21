@@ -55,10 +55,11 @@ public class ConfiguredAPI {
     }
     logger.info("API Health Status: {}", status);
     
-    String clientId = "4sknuarei0bakajuguv1us2mop";
+    JwtClientCredentialsRequestVO jwtRequest = new JwtClientCredentialsRequestVO(
+        Globals.API_SECRET, 
+        Globals.API_SCOPE);
     
-    JwtClientCredentialsRequestVO jwtRequest = new JwtClientCredentialsRequestVO(clientId, apiSecret);
-    jwt = AuthUtils.getJwt(host + "/access-token", jwtRequest);
+    jwt = AuthUtils.getJwt(host + "/m2m-sign-in", jwtRequest);
     logger.info("Service has Signed In");
     
     logger.info("API Successfully Configured");
