@@ -16,6 +16,7 @@ import com.norpactech.nc.api.utils.ApiResponse;
 import com.norpactech.nc.config.json.GsonConfig;
 import com.norpactech.nc.config.load.ConfiguredAPI;
 import com.norpactech.nc.config.load.Globals;
+import com.norpactech.nc.config.tenant.TenantContext;
 import com.norpactech.nc.utils.TextUtils;
 
 import okhttp3.MediaType;
@@ -92,7 +93,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", Globals.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
     
     okhttp3.Request request = requestBuilder.build();
     response = client.newCall(request).execute();       
@@ -106,8 +107,8 @@ public abstract class ParetoNativeRepository<T> {
   
   public ApiResponse post(Map<String, Object> apiPostRequest) throws Exception {
 
-    String version = ConfiguredAPI.apiVersion == null ? "" : "/" + ConfiguredAPI.apiVersion;
-    URL url = new URL(ConfiguredAPI.host + version + getRelativeURL());
+    String version = Globals.PARETO_API_VERSION == null ? "" : "/" + Globals.PARETO_API_VERSION;
+    URL url = new URL(Globals.PARETO_API_URL + version + getRelativeURL());
 
     OkHttpClient client = new OkHttpClient().newBuilder().build();
     String jsonBody = gson.toJson(apiPostRequest);
@@ -119,7 +120,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", Globals.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();
@@ -133,8 +134,8 @@ public abstract class ParetoNativeRepository<T> {
   
   public ApiResponse put(Map<String, Object> apiPutRequest) throws Exception {
 
-    String version = ConfiguredAPI.apiVersion == null ? "" : "/" + ConfiguredAPI.apiVersion;
-    URL url = new URL(ConfiguredAPI.host + version + getRelativeURL());
+    String version = Globals.PARETO_API_VERSION == null ? "" : "/" + Globals.PARETO_API_VERSION;
+    URL url = new URL(Globals.PARETO_API_URL + version + getRelativeURL());
 
     OkHttpClient client = new OkHttpClient().newBuilder().build();
     String jsonBody = gson.toJson(apiPutRequest);
@@ -146,7 +147,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", Globals.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();
@@ -160,8 +161,8 @@ public abstract class ParetoNativeRepository<T> {
   
   public ApiResponse delete(Map<String, Object> apiDeleteRequest) throws Exception {
 
-    String version = ConfiguredAPI.apiVersion == null ? "" : "/" + ConfiguredAPI.apiVersion;
-    URL url = new URL(ConfiguredAPI.host + version + getRelativeURL());
+    String version = Globals.PARETO_API_VERSION == null ? "" : "/" + Globals.PARETO_API_VERSION;
+    URL url = new URL(Globals.PARETO_API_URL + version + getRelativeURL());
 
     OkHttpClient client = new OkHttpClient().newBuilder().build();
     String jsonBody = gson.toJson(apiDeleteRequest);
@@ -173,7 +174,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", Globals.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();

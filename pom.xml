@@ -83,6 +83,7 @@
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+    
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
@@ -100,6 +101,7 @@
       <artifactId>sts</artifactId>
       <version>2.20.0</version>
     </dependency>
+    
     <!-- Test Dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.norpactech.nc.api.utils.ApiFindOneRequest;
 import com.norpactech.nc.api.utils.ApiResponse;
 import com.norpactech.nc.config.load.ConfiguredAPI;
+import com.norpactech.nc.config.load.Globals;
 
 import okhttp3.OkHttpClient;
 
@@ -17,7 +18,7 @@ public class NetUtils {
 
   public static ApiResponse health() throws Exception {
 
-    URL url = new URL(ConfiguredAPI.host + "/health");
+    URL url = new URL(Globals.PARETO_API_URL + "/health");
 
     okhttp3.Response response = null;
     OkHttpClient client = new OkHttpClient().newBuilder().build();

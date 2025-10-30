@@ -3,6 +3,9 @@ package com.norpactech.nc.api.utils;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -14,6 +17,7 @@ import com.norpactech.nc.api.exception.ApiResponseException;
 import com.norpactech.nc.enums.EnumApiCodes;
 import com.norpactech.nc.enums.EnumStatus;
 import com.norpactech.nc.utils.TextUtils;
+import com.norpactech.nc.utils.Constant;
 /**
  * Handles: Successful, Unsuccessful, and Exception responses
  */
@@ -157,6 +161,26 @@ public class ApiResponse {
             throw new ApiResponseException(dateString + " is an unsuppored Timestamp format");
           }        
         }
+        
+        // Handle java.time.LocalDateTime values coming as ISO strings (e.g., 2025-01-01T12:34:56.789Z)
+        if (field.getType() == LocalDateTime.class && fieldValue instanceof String) {
+          String dateString = (String) fieldValue;
+          if (dateString == null || dateString.isEmpty()) {
+            fieldValue = null;
+          } else {
+            try {
+              fieldValue = LocalDateTime.parse(dateString, Constant.TIMESTAMP_FORMATTER);
+            } catch (Exception ex1) {
+              try {
+                Instant instant = Instant.parse(dateString);
+                fieldValue = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+              } catch (Exception ex2) {
+                throw new ApiResponseException(dateString + " is an unsupported LocalDateTime format");
+              }
+            }
+          }
+        }
+        
         field.set(instance, fieldValue);
       } 
       catch (NoSuchFieldException e) {

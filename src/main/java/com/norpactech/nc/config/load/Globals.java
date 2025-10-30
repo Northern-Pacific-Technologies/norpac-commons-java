@@ -1,9 +1,11 @@
 package com.norpactech.nc.config.load;
 
 import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
@@ -18,15 +20,15 @@ public class Globals {
   private static final Dotenv dotenv;
 
   // API Configuration
-  public static final String API_CLIENT;
-  public static final String API_SECRET;
-  public static final String API_SCOPE;
+  public static final String PARETO_API_CLIENT;
+  public static final String PARETO_API_SECRET;
+  public static final String PARETO_API_SCOPE;
   
-  public static final String API_USERNAME;
-  public static final String API_PASSWORD;
+  public static final String PARETO_API_USERNAME;
+  public static final String PARETO_API_PASSWORD;
   
-  public static final String API_URL;
-  public static final String API_VERSION;
+  public static final String PARETO_API_URL;
+  public static final String PARETO_API_VERSION;
 
   // Database Configuration
   public static final String DB_USERNAME;
@@ -40,6 +42,9 @@ public class Globals {
   public static final String LOG_LEVEL;
   public static final String UPDATE_MODE;
   public static final String CLEANSED_MODE;
+  
+  // Loader Configuration
+  public static final String IMPORT_DATA_DIRECTORY;
 
   // Environment indicator
   public static final String ENVIRONMENT;
@@ -54,26 +59,30 @@ public class Globals {
 
     logger.info("Loading global environment variables...");
 
-    // Login with Client Credentials  
-    API_CLIENT = getEnvWithDefault("API_CLIENT", null);
-    API_SECRET = getEnvWithDefault("API_SECRET", null);
-    API_SCOPE = getEnvWithDefault("API_SCOPE", "norpac-commons-api/write");
-    // Login Username/Password
-    API_USERNAME = getEnvWithDefault("API_USERNAME", null);
-    API_PASSWORD = getEnvWithDefault("API_PASSWORD", null);
-    
-    API_URL = getRequiredEnv("API_URL");
-    API_VERSION = getRequiredEnv("API_VERSION");
+    PARETO_API_URL = getRequiredEnv("PARETO_API_URL");
+    PARETO_API_VERSION = getRequiredEnv("PARETO_API_VERSION");
 
-    // Database Configuration
-    DB_USERNAME = getRequiredEnv("DB_USERNAME");
-    DB_PASSWORD = getRequiredEnv("DB_PASSWORD");
-    DB_URL = getRequiredEnv("DB_URL");
+    // Login with Client Credentials only for nopac-commons-api
+    PARETO_API_CLIENT = getEnvWithDefault("PARETO_API_CLIENT", null);
+    PARETO_API_SECRET = getEnvWithDefault("PARETO_API_SECRET", null);
+    PARETO_API_SCOPE = getEnvWithDefault("PARETO_API_SCOPE", "norpac-commons-api/write");
+
+    // Login Username/Password
+    PARETO_API_USERNAME = getEnvWithDefault("PARETO_API_USERNAME", null);
+    PARETO_API_PASSWORD = getEnvWithDefault("PARETO_API_PASSWORD", null);
+
+    // Loader Configuration
+    IMPORT_DATA_DIRECTORY = getEnvWithDefault("IMPORT_DATA_DIRECTORY", "");
+    
+    // Database Configuration - only used in the Pareto Importer
+    DB_USERNAME = getEnvWithDefault("DB_USERNAME", null);
+    DB_PASSWORD = getEnvWithDefault("DB_PASSWORD", null);
+    DB_URL = getEnvWithDefault("DB_URL", null);
     DB_CLASS = getEnvWithDefault("DB_CLASS", "com.mysql.cj.jdbc.Driver");
 
-    // Application Configuration
-    REGION_NAME = getRequiredEnv("REGION_NAME");
-    TENANT_NAME = getRequiredEnv("TENANT_NAME");
+    // Application Configuration used in application loaders
+    REGION_NAME = getEnvWithDefault("REGION_NAME", null);
+    TENANT_NAME = getEnvWithDefault("TENANT_NAME", null);
     LOG_LEVEL = getEnvWithDefault("LOG_LEVEL", "INFO");
     UPDATE_MODE = getEnvWithDefault("UPDATE_MODE", "false");
     CLEANSED_MODE = getEnvWithDefault("CLEANSED_MODE", "true");
@@ -203,22 +212,51 @@ public class Globals {
    * Log the current configuration (excluding sensitive information)
    */
   private static void logConfiguration() {
-    if (logger.isInfoEnabled()) {
-      logger.info("=== Global Configuration ===");
-      logger.info("Environment: {}", ENVIRONMENT);
-      logger.info("Region: {}", REGION_NAME);
-      logger.info("API URL: {}", API_URL);
-      logger.info("API Version: {}", API_VERSION);
-      logger.info("Database URL: {}", DB_URL);
-      logger.info("Database Class: {}", DB_CLASS);
-      logger.info("Log Level: {}", LOG_LEVEL);
-      logger.info("Update Mode: {}", UPDATE_MODE);
-      logger.info("============================");
-    }
+    
   }
   /**
    * Validate that all required environment variables are properly set
    */
+  public static void validateApiConfiguration() {
+  
+    logger.info("=== API Configuration ===");
+    logger.info("API URL.....: {}", PARETO_API_URL);
+    logger.info("API Version.: {}", PARETO_API_VERSION);
+    logger.info("API Username: {}", PARETO_API_USERNAME);
+    logger.info("API Password: {}", PARETO_API_PASSWORD != null ? "********" : "null");
+
+    if (StringUtils.isEmpty(PARETO_API_URL)) {
+      logger.error("Null or empty Pareto Factory URL. Set environment variable: PARETO_API_URL. Terminating...");
+      System.exit(1);
+    }
+
+    if (StringUtils.isEmpty(PARETO_API_VERSION)) {
+      logger.error("Null or empty API Version. Set environment variable: PARETO_API_VERSION. Terminating...");
+      System.exit(1);
+    }    
+    
+    if (StringUtils.isEmpty(PARETO_API_USERNAME)) {
+      logger.error("Null or empty username. Set environment variable: PARETO_API_USERNAME. Terminating...");
+      System.exit(1);
+    }
+    
+    if (StringUtils.isEmpty(PARETO_API_PASSWORD)) {
+      logger.error("Null or empty password. Set environment variable: PARETO_API_PASSWORD. Terminating...");
+      System.exit(1);
+    }
+  }
+  
+  public static void validateLoaderConfiguration() {
+    
+    logger.info("=== Loader Configuration ===");
+    logger.info("Import Data Directory: {}", IMPORT_DATA_DIRECTORY);
+
+    if (StringUtils.isEmpty(IMPORT_DATA_DIRECTORY)) {
+      logger.error("Null or empty Import Data Directory. Set environment variable: IMPORT_DATA_DIRECTORY. Terminating...");
+      System.exit(1);
+    }
+  }
+  
   public static void validateConfiguration() {
     logger.info("Validating global configuration...");
 

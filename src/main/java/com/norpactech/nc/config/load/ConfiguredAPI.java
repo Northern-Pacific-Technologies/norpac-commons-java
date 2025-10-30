@@ -56,8 +56,8 @@ public class ConfiguredAPI {
     logger.info("API Health Status: {}", status);
     
     JwtClientCredentialsRequestVO jwtRequest = new JwtClientCredentialsRequestVO(
-        Globals.API_SECRET, 
-        Globals.API_SCOPE);
+        Globals.PARETO_API_SECRET, 
+        Globals.PARETO_API_SCOPE);
     
     jwt = AuthUtils.getJwt(host + "/m2m-sign-in", jwtRequest);
     logger.info("Service has Signed In");
@@ -94,12 +94,12 @@ public class ConfiguredAPI {
     if (!status.equals(EnumStatus.OK.getName())) {
       throw new Exception("Unhealthy Server. Status: " + status); 
     }
-    logger.info("United Bins API Health Status: {}", status);
+    logger.info("API Health Status: {}", status);
     
     JwtUsernamePasswordRequestVO jwtRequest = new JwtUsernamePasswordRequestVO(username, password);
     jwt = AuthUtils.getJwt(host + "/access-token", jwtRequest);
     logger.info("User '{}' Signed In", jwtRequest.getEmail());
     
-    logger.info("United Bins API Successfully Configured");
+    logger.info("API Successfully Configured");
   }  
 }
