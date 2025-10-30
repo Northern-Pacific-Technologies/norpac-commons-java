@@ -69,6 +69,12 @@
       <version>${gson.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.19.3</version>
+    </dependency>
+
     <!-- Lombok for code generation -->
     <dependency>
       <groupId>org.projectlombok</groupId>
