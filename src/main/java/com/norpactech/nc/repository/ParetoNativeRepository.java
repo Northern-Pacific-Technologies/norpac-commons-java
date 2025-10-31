@@ -80,9 +80,9 @@ public abstract class ParetoNativeRepository<T> {
   
   public ApiResponse get(ApiGetRequest apiGetRequest) throws Exception {
 
-    String version = ConfiguredAPI.apiVersion == null ? "" : "/" + ConfiguredAPI.apiVersion;
+    String version = Globals.PARETO_API_VERSION == null ? "" : "/" + Globals.PARETO_API_VERSION;
     String queryString = TextUtils.toQueryString(apiGetRequest.getParams());
-    URL url = new URL(ConfiguredAPI.host + version + apiGetRequest.getUri() + queryString.toString());
+    URL url = new URL(Globals.PARETO_API_URL + version + apiGetRequest.getUri() + queryString.toString());
 
     okhttp3.Response response = null;
     OkHttpClient client = new OkHttpClient().newBuilder().build();
@@ -93,7 +93,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant());
     
     okhttp3.Request request = requestBuilder.build();
     response = client.newCall(request).execute();       

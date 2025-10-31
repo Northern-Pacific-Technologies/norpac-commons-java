@@ -1,5 +1,7 @@
 package com.norpactech.nc.config.tenant;
 
+import java.util.UUID;
+
 public class TenantContext {
 
   private static final ThreadLocal<String> CURRENT = new ThreadLocal<>();
@@ -12,6 +14,10 @@ public class TenantContext {
   
   public static String getIdTenant() { 
     return CURRENT.get(); 
+  }
+ 
+  public static UUID getUUID() { 
+    return UUID.fromString(CURRENT.get()); 
   }
   
   public static void clear() { 

@@ -30,11 +30,15 @@ public class Globals {
   public static final String PARETO_API_URL;
   public static final String PARETO_API_VERSION;
 
+  public static final String PARETO_API_TENANT_NAME;
+  public static final String PARETO_API_SCHEMA_NAME;
+
   // Database Configuration
   public static final String DB_USERNAME;
   public static final String DB_PASSWORD;
   public static final String DB_URL;
   public static final String DB_CLASS;
+  public static final String DB_SCHEMA;
 
   // Application Configuration
   public static final String REGION_NAME;
@@ -59,6 +63,9 @@ public class Globals {
 
     logger.info("Loading global environment variables...");
 
+    PARETO_API_TENANT_NAME = getEnvWithDefault("PARETO_API_TENANT_NAME", null);
+    PARETO_API_SCHEMA_NAME = getEnvWithDefault("PARETO_API_SCHEMA_NAME", null);
+    
     PARETO_API_URL = getRequiredEnv("PARETO_API_URL");
     PARETO_API_VERSION = getRequiredEnv("PARETO_API_VERSION");
 
@@ -79,6 +86,7 @@ public class Globals {
     DB_PASSWORD = getEnvWithDefault("DB_PASSWORD", null);
     DB_URL = getEnvWithDefault("DB_URL", null);
     DB_CLASS = getEnvWithDefault("DB_CLASS", "com.mysql.cj.jdbc.Driver");
+    DB_SCHEMA = getEnvWithDefault("DB_SCHEMA", null);
 
     // Application Configuration used in application loaders
     REGION_NAME = getEnvWithDefault("REGION_NAME", null);
@@ -242,6 +250,58 @@ public class Globals {
     
     if (StringUtils.isEmpty(PARETO_API_PASSWORD)) {
       logger.error("Null or empty password. Set environment variable: PARETO_API_PASSWORD. Terminating...");
+      System.exit(1);
+    }
+  }
+  
+  public static void validateImportConfiguration() {
+
+    logger.info("=== Import Configuration ===");
+    logger.info("Tenant Name: {}", PARETO_API_TENANT_NAME);
+    logger.info("Schema Name: {}", PARETO_API_SCHEMA_NAME);
+
+    if (StringUtils.isEmpty(PARETO_API_TENANT_NAME)) {
+      logger.error("Null or empty Tenant Name. Set environment variable: PARETO_TENANT_NAME. Terminating...");
+      System.exit(1);
+    }    
+    
+    if (StringUtils.isEmpty(PARETO_API_SCHEMA_NAME)) {
+      logger.error("Null or empty Schema Name. Set environment variable: PARETO_SCHEMA_NAME. Terminating...");
+      System.exit(1);
+    }
+  }
+  
+  public static void validateDatabaseConfiguration() {
+    
+    logger.info("=== API Configuration ===");
+    logger.info("DB Username: {}", DB_USERNAME);
+    logger.info("DB Password: {}", DB_PASSWORD != null ? "********" : "null");
+    logger.info("DB URL.....: {}", DB_URL);
+    logger.info("DB Class...: {}", DB_CLASS);
+    logger.info("DB Schema..: {}", DB_SCHEMA);
+
+    if (StringUtils.isEmpty(DB_USERNAME)) {
+      logger.error("Null or empty Database Username. Set environment variable: DB_USERNAME. Terminating...");
+      System.exit(1);
+    }
+
+    if (StringUtils.isEmpty(DB_PASSWORD)) {
+      logger.error("Null or empty Database Password. Set environment variable: DB_PASSWORD. Terminating...");
+      System.exit(1);
+    }    
+    
+    if (StringUtils.isEmpty(DB_URL)) {
+      logger.error("Null or empty Database URL. Set environment variable: DB_URL. Terminating...");
+      System.exit(1);
+    }
+    
+    if (StringUtils.isEmpty(DB_CLASS)) {
+      logger.error("Null or empty Database Class. Set environment variable: DB_CLASS. Terminating...");
+      System.exit(1);
+    }
+    
+    if (StringUtils.isEmpty(DB_SCHEMA)) {
+      logger.error("Null or empty Database Schema. Set environment variable: DB_SCHEMA. Terminating...");
       System.exit(1);
     }
   }
