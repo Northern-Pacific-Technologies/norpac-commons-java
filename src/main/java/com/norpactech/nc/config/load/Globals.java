@@ -41,7 +41,6 @@ public class Globals {
   public static final String DB_SCHEMA;
 
   // Application Configuration
-  public static final String REGION_NAME;
   public static final String TENANT_NAME;
   public static final String LOG_LEVEL;
   public static final String UPDATE_MODE;
@@ -89,7 +88,6 @@ public class Globals {
     DB_SCHEMA = getEnvWithDefault("DB_SCHEMA", null);
 
     // Application Configuration used in application loaders
-    REGION_NAME = getEnvWithDefault("REGION_NAME", null);
     TENANT_NAME = getEnvWithDefault("TENANT_NAME", null);
     LOG_LEVEL = getEnvWithDefault("LOG_LEVEL", "INFO");
     UPDATE_MODE = getEnvWithDefault("UPDATE_MODE", "false");
@@ -116,10 +114,6 @@ public class Globals {
     return TENANT_NAME;
   }
   
-  public static String getRegionName() {
-    return REGION_NAME;
-  }
-
   /**
    * Get a required environment variable. First checks .env file, then system environment.
    */
