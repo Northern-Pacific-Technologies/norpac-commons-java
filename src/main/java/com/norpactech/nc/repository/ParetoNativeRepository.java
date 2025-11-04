@@ -93,7 +93,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant());
+        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
     
     okhttp3.Request request = requestBuilder.build();
     response = client.newCall(request).execute();       

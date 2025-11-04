@@ -4,23 +4,12 @@ import java.util.UUID;
 
 public class TenantOriginContext {
 
-  private static final ThreadLocal<String> CURRENT = new ThreadLocal<>();
+  private static UUID idTenantOrigin;
   
-  private TenantOriginContext() {}
-
-  public static void setIdTenantOrigin(String idTenantOrigin) { 
-    CURRENT.set(idTenantOrigin); 
+  public static void setIdTenantOrigin(UUID idTenantOrigin) { 
+    TenantOriginContext.idTenantOrigin = idTenantOrigin;
   }
-  
-  public static String getIdTenantOrigin() { 
-    return CURRENT.get(); 
+  public static UUID getIdTenantOrigin() { 
+    return idTenantOrigin; 
   }
- 
-  public static UUID getUUID() { 
-    return UUID.fromString(CURRENT.get()); 
-  }
-  
-  public static void clear() { 
-    CURRENT.remove(); 
-  }  
 }
