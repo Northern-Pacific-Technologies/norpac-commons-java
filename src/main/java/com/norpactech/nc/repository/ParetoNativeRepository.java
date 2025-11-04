@@ -93,7 +93,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getId().toString());
     
     okhttp3.Request request = requestBuilder.build();
     response = client.newCall(request).execute();       
@@ -120,7 +120,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getId().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();
@@ -147,7 +147,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getId().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();
@@ -174,7 +174,7 @@ public abstract class ParetoNativeRepository<T> {
         .addHeader("Accept", "application/json")
         .addHeader("Content-Type", "application/json")
         .addHeader("Authorization", "Bearer " + ConfiguredAPI.jwt)
-        .addHeader("X-Tenant-ID", TenantContext.getIdTenant().toString());
+        .addHeader("X-Tenant-ID", TenantContext.getId().toString());
 
     okhttp3.Request request = requestBuilder.build();
     okhttp3.Response response = client.newCall(request).execute();
