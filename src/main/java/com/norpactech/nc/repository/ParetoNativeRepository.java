@@ -100,7 +100,7 @@ public abstract class ParetoNativeRepository<T> {
 
     int responseCode = response.code();
     if (responseCode > 299) {
-      throw new Exception("GET Request Failed: " + response.message());
+      throw new Exception("GET Request Failed: " + responseCode + " " + response.message());
     }
     return gson.fromJson(response.body().string(), ApiResponse.class);
   } 
@@ -127,7 +127,7 @@ public abstract class ParetoNativeRepository<T> {
 
     int responseCode = response.code();
     if (responseCode > 299) {
-        throw new Exception("POST Request Failed: " + response.message());
+        throw new Exception("POST Request Failed: " + responseCode + " " +  response.message());
     }
     return gson.fromJson(response.body().string(), ApiResponse.class);
   }
@@ -154,7 +154,7 @@ public abstract class ParetoNativeRepository<T> {
 
     int responseCode = response.code();
     if (responseCode > 299) {
-        throw new Exception("POST Request Failed: " + response.message());
+      throw new Exception("POST Request Failed: " + responseCode + " " + response.message());
     }
     return gson.fromJson(response.body().string(), ApiResponse.class);
   }
@@ -181,7 +181,7 @@ public abstract class ParetoNativeRepository<T> {
 
     int responseCode = response.code();
     if (responseCode > 299) {
-        throw new Exception("POST Request Failed: " + response.message());
+      throw new Exception("POST Request Failed: " + responseCode + " " + response.message());
     }
     return gson.fromJson(response.body().string(), ApiResponse.class);
   }

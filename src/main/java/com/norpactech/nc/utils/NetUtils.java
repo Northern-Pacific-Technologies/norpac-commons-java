@@ -34,7 +34,7 @@ public class NetUtils {
 
     int responseCode = response.code();
     if (responseCode > 299) {
-      throw new Exception("GET Request Failed: " + response.message());
+      throw new Exception("GET Request Failed for: " + url + " " + responseCode + " " + response.message());
     }
     Object retVal = new String(response.body().bytes());
     return new ApiResponse(retVal);
