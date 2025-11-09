@@ -34,11 +34,11 @@ public class Globals {
   public static final String PARETO_API_SCHEMA_NAME;
 
   // Database Configuration
-  public static final String DB_USERNAME;
-  public static final String DB_PASSWORD;
-  public static final String DB_URL;
-  public static final String DB_CLASS;
-  public static final String DB_SCHEMA;
+  public static final String EXPORT_DB_USERNAME;
+  public static final String EXPORT_DB_PASSWORD;
+  public static final String EXPORT_DB_URL;
+  public static final String EXPORT_DB_CLASS;
+  public static final String EXPORT_DATA_DIRECTORY;
 
   // Application Configuration
   public static final String TENANT_NAME;
@@ -65,8 +65,8 @@ public class Globals {
     PARETO_API_TENANT_NAME = getEnvWithDefault("PARETO_API_TENANT_NAME", null);
     PARETO_API_SCHEMA_NAME = getEnvWithDefault("PARETO_API_SCHEMA_NAME", null);
     
-    PARETO_API_URL = getRequiredEnv("PARETO_API_URL");
-    PARETO_API_VERSION = getRequiredEnv("PARETO_API_VERSION");
+    PARETO_API_URL = getEnvWithDefault("PARETO_API_URL", null);
+    PARETO_API_VERSION = getEnvWithDefault("PARETO_API_VERSION", null);
 
     // Login with Client Credentials only for nopac-commons-api
     PARETO_API_CLIENT = getEnvWithDefault("PARETO_API_CLIENT", null);
@@ -80,12 +80,11 @@ public class Globals {
     // Loader Configuration
     IMPORT_DATA_DIRECTORY = getEnvWithDefault("IMPORT_DATA_DIRECTORY", "");
     
-    // Database Configuration - only used in the Pareto Importer
-    DB_USERNAME = getEnvWithDefault("DB_USERNAME", null);
-    DB_PASSWORD = getEnvWithDefault("DB_PASSWORD", null);
-    DB_URL = getEnvWithDefault("DB_URL", null);
-    DB_CLASS = getEnvWithDefault("DB_CLASS", "com.mysql.cj.jdbc.Driver");
-    DB_SCHEMA = getEnvWithDefault("DB_SCHEMA", null);
+    EXPORT_DB_USERNAME = getEnvWithDefault("EXPORT_DB_USERNAME", null);
+    EXPORT_DB_PASSWORD = getEnvWithDefault("EXPORT_DB_PASSWORD", null);
+    EXPORT_DB_URL = getEnvWithDefault("EXPORT_DB_URL", null);
+    EXPORT_DB_CLASS = getEnvWithDefault("EXPORT_DB_CLASS", "com.mysql.cj.jdbc.Driver");
+    EXPORT_DATA_DIRECTORY = getEnvWithDefault("EXPORT_DATA_DIRECTORY", null);
 
     // Application Configuration used in application loaders
     TENANT_NAME = getEnvWithDefault("TENANT_NAME", null);
@@ -117,6 +116,7 @@ public class Globals {
   /**
    * Get a required environment variable. First checks .env file, then system environment.
    */
+  @SuppressWarnings("unused")
   private static String getRequiredEnv(String key) {
     String value = getEnvValue(key);
     if (StringUtils.isEmpty(value)) {
@@ -265,37 +265,37 @@ public class Globals {
     }
   }
   
-  public static void validateDatabaseConfiguration() {
+  public static void validateExportConfiguration() {
     
     logger.info("=== API Configuration ===");
-    logger.info("DB Username: {}", DB_USERNAME);
-    logger.info("DB Password: {}", DB_PASSWORD != null ? "********" : "null");
-    logger.info("DB URL.....: {}", DB_URL);
-    logger.info("DB Class...: {}", DB_CLASS);
-    logger.info("DB Schema..: {}", DB_SCHEMA);
+    logger.info("DB Username.....: {}", EXPORT_DB_USERNAME);
+    logger.info("DB Password.....: {}", EXPORT_DB_PASSWORD != null ? "********" : "null");
+    logger.info("DB URL..........: {}", EXPORT_DB_URL);
+    logger.info("DB Class........: {}", EXPORT_DB_CLASS);
+    logger.info("Export Directory: {}", EXPORT_DATA_DIRECTORY);
 
-    if (StringUtils.isEmpty(DB_USERNAME)) {
-      logger.error("Null or empty Database Username. Set environment variable: DB_USERNAME. Terminating...");
+    if (StringUtils.isEmpty(EXPORT_DB_USERNAME)) {
+      logger.error("Null or empty Database Username. Set environment variable: EXPORT_DB_USERNAME. Terminating...");
       System.exit(1);
     }
 
-    if (StringUtils.isEmpty(DB_PASSWORD)) {
-      logger.error("Null or empty Database Password. Set environment variable: DB_PASSWORD. Terminating...");
+    if (StringUtils.isEmpty(EXPORT_DB_PASSWORD)) {
+      logger.error("Null or empty Database Password. Set environment variable: EXPORT_DB_PASSWORD. Terminating...");
       System.exit(1);
     }    
     
-    if (StringUtils.isEmpty(DB_URL)) {
-      logger.error("Null or empty Database URL. Set environment variable: DB_URL. Terminating...");
+    if (StringUtils.isEmpty(EXPORT_DB_URL)) {
+      logger.error("Null or empty Database URL. Set environment variable: EXPORT_DB_URL. Terminating...");
       System.exit(1);
     }
     
-    if (StringUtils.isEmpty(DB_CLASS)) {
-      logger.error("Null or empty Database Class. Set environment variable: DB_CLASS. Terminating...");
+    if (StringUtils.isEmpty(EXPORT_DB_CLASS)) {
+      logger.error("Null or empty Database Class. Set environment variable: EXPORT_DB_CLASS. Terminating...");
       System.exit(1);
     }
     
-    if (StringUtils.isEmpty(DB_SCHEMA)) {
-      logger.error("Null or empty Database Schema. Set environment variable: DB_SCHEMA. Terminating...");
+    if (StringUtils.isEmpty(EXPORT_DATA_DIRECTORY)) {
+      logger.error("Null or empty Export Directory. Set environment variable: EXPORT_DATA_DIRECTORY. Terminating...");
       System.exit(1);
     }
   }
