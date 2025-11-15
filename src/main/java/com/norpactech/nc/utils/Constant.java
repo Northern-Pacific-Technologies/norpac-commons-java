@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 public final class Constant {
   private Constant() {}
   
+  public static final String SYSTEM_TENANT = "norpac-system";
+  
   public static final DateTimeFormatter TIMESTAMP_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
   
